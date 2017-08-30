@@ -1,0 +1,27 @@
+{
+  "name": "wage-calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "src/main.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilkkav/wage-calculator.git"
+  },
+  "author": "Ilkka Vanhanen",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ilkkav/wage-calculator/issues"
+  },
+  "homepage": "https://github.com/ilkkav/wage-calculator#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "moment": "^2.18.1"
+  }
+}
