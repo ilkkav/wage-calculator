@@ -1,10 +1,13 @@
-"use strict";
 
 const Promise = require('bluebird');
-const parseCsv = require('./parseCsv').parseCsv;
+const parser = require('./parseCsv');
+const parseCsv = parser.parseCsv;
+const parseWageEntries = parser.parseWageEntries;
+const getDailyHours = require('./calculateWages').getDailyHours;
 var readFile = Promise.promisify(require("fs").readFile);
 
 readFile("./data/HourList201403.csv", "utf8")
   .then(content => {
-    const wages = parseCsv(content, ',');
+    const allWages = parseWageEntries(parseCsv(content, ','));
+    getDailyHours('1', allWages);
   });
