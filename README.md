@@ -2,7 +2,8 @@
 Parse hour entries and calculate wages from a csv file.
 
 ## Run locally
-`npm start`
+run `npm start`
+
 Open http://localhost:3000 in your browser.
 
 ## Run tests
