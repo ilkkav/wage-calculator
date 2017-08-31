@@ -8,12 +8,12 @@ const getColumnNames = (headerRow, delimiter) => headerRow.split(delimiter);
 const toDateTime = (date, time) => moment(`${date}-${time}`, 'DD.MM.YYYY-HH:mm');
 
 const getStartAndEndTime = (entry) => {
-  //FIX: parse date already here
   const startTime = toDateTime(entry.date, entry.start);
-  const endTime = toDateTime(entry.date, entry.end);
+  let endTime = toDateTime(entry.date, entry.end);
   if (endTime.isBefore(startTime)) {
-    endTime = toDateTime(entry.date.add(1, 'minutes'), entry.end);
+    endTime = endTime.add(1, 'days');
   }
+
   return [ startTime, endTime ];
 };
 
@@ -44,7 +44,6 @@ const parseRow = (row, columnNames) => {
 
 const parseWageEntries = (rawData) => {
   const columnNames = getColumnNames(rawData[0], ',');
-  console.log(rawData.slice(1));
   return rawData.slice(1).map(row => parseRow(row, columnNames));
 }
 
