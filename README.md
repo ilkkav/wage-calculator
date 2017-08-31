@@ -1,5 +1,5 @@
 # wage-calculator
-Parse hour entries from a csv file and calculate wages.
+Parse hour entries and calculate wages from a csv file.
 
 ## Run locally
 `npm start`
