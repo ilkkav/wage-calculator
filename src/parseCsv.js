@@ -1,6 +1,4 @@
-const Promise = require('bluebird');
 const moment = require('moment');
-var readFile = Promise.promisify(require("fs").readFile);
 
 const getColumnNames = (headerRow, delimiter) => headerRow.split(delimiter);
 
@@ -14,7 +12,7 @@ const getStartAndEndTime = (entry) => {
     endTime = endTime.add(1, 'days');
   }
 
-  return [ startTime, endTime ];
+  return [startTime, endTime];
 };
 
 const mapWageEntry = (entry) => {
@@ -31,7 +29,7 @@ const mapWageEntry = (entry) => {
 const toJsonName = (name) => {
   const trimmed = name.replace(' ', '');
   return trimmed.charAt(0).toLowerCase() + trimmed.slice(1);
-}
+};
 
 const parseRow = (row, columnNames) => {
   const rawData = {};
@@ -45,11 +43,10 @@ const parseRow = (row, columnNames) => {
 const parseWageEntries = (rawData) => {
   const columnNames = getColumnNames(rawData[0], ',');
   return rawData.slice(1).map(row => parseRow(row, columnNames));
-}
+};
 
-const parseCsv = (content, delimiter) => {
+const parseCsv = (content) => {
   const rows = content.split('\n');
-  const columnNames = getColumnNames(rows[0], delimiter);
   return rows.filter(row => row.trim());
 };
 
