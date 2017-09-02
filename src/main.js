@@ -5,7 +5,7 @@ const parser = require('./parseCsv');
 
 const parseCsv = parser.parseCsv;
 const parseWageEntries = parser.parseWageEntries;
-const getDailyHours = require('./calculateWages').getDailyHours;
+const getDailyHours = require('./calculateHours').getDailyHours;
 const readFile = Promise.promisify(require('fs').readFile);
 
 let app;
