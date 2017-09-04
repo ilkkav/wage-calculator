@@ -41,13 +41,32 @@ describe('get hours', () => {
     ];
 
     const result = accumulateHours(existingHours, '1', '2017-03-03', { evening: 5, total: 6 });
-    console.log(result);
     result.length.should.equal(1);
     const person = _.find(result, { personID: '1' });
     _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({  evening: 11, total: 12 });
   });
 
-  it('calculates evening hours', () => {
+  it('create new day for existing person', () => {
+    const existingHours = [
+      { personID: '1',
+        dailyHours: [
+          {
+            date: '2017-03-03', 
+            hours: { evening: 6, total: 6 },
+          },
+        ],  
+      },
+    ];
+
+    const result = accumulateHours(existingHours, '1', '2017-03-04', { evening: 9, total: 77 });
+    result.length.should.equal(1);
+    const person = _.find(result, { personID: '1' });
+    person.dailyHours.length.should.equal(2);
+    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({  evening: 6, total: 6 });
+    _.find(person.dailyHours, { date: '2017-03-04' }).hours.should.deepEqual({  evening: 9, total: 77 });
+  })
+
+  it('calculate evening hours', () => {
     getEveningHours(moment('2017-08-28T03:00'), moment('2017-08-28T19:30')).should.equal(4.5);
     getEveningHours(moment('2017-08-28T07:00'), moment('2017-08-28T19:30')).should.equal(1.5);
     getEveningHours(moment('2017-08-28T06:00'), moment('2017-08-28T18:00')).should.equal(0);
