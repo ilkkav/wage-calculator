@@ -20,12 +20,12 @@ describe('get hours', () => {
   });
 
   it('accumulate hours to empty collection', () => {
-    const result = accumulateHours([], '1', '2017-03-03', { weighted: 3, evening: 5, total: 6 });
+    const result = accumulateHours([], '1', '2017-03-03', { evening: 5, total: 6 });
     result.length.should.equal(1);
     const personDay = result[0];
     personDay.personID.should.equal('1');
     personDay.dailyHours.length.should.equal(1);
-    personDay.dailyHours[0].should.deepEqual({ date: '2017-03-03', hours: { weighted: 3, evening: 5, total: 6 } });
+    personDay.dailyHours[0].should.deepEqual({ date: '2017-03-03', hours: { evening: 5, total: 6 } });
   });
 
   it('accumulate hours to existing person-date entry', () => {
@@ -33,17 +33,18 @@ describe('get hours', () => {
       { personID: '1',
         dailyHours: [
           {
-            date: '2017-03-03',
-            hours: { weighted: 5, evening: 6, total: 6 },
+            date: '2017-03-03', 
+            hours: { evening: 6, total: 6 },
           },
-        ],
+        ],  
       },
     ];
 
-    const result = accumulateHours(existingHours, '1', '2017-03-03', { weighted: 3, evening: 5, total: 6 });
+    const result = accumulateHours(existingHours, '1', '2017-03-03', { evening: 5, total: 6 });
+    console.log(result);
     result.length.should.equal(1);
     const person = _.find(result, { personID: '1' });
-    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({ weighted: 8, evening: 11, total: 12 });
+    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({  evening: 11, total: 12 });
   });
 
   it('calculates evening hours', () => {

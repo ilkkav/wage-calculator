@@ -1,8 +1,8 @@
 
 const Moment = require('moment');
 const MomentRange = require('moment-range');
-
 const moment = MomentRange.extendMoment(Moment);
+const _ = require('lodash');
 
 const getWeightedHours = (total, hours, maxHours, weight) => {
   const weightedHours = Math.min(hours, maxHours) * weight;
@@ -45,9 +45,8 @@ const getEveningHours = (start, end) => {
 
 const getHours = (entry) => {
   const total = diffAsHours(entry.startTime, entry.endTime);
-  const weighted = getOvertimeWeightedHours(total);
   const evening = getEveningHours(entry.startTime, entry.endTime);
-  return { total, weighted, evening };
+  return { total, evening };
 };
 
 const accumulateHours = (result, personID, date, hours) => {
@@ -62,20 +61,18 @@ const accumulateHours = (result, personID, date, hours) => {
     return result;
   }
   personDate.hours.total += hours.total;
-  personDate.hours.weighted += hours.weighted;
   personDate.hours.evening += hours.evening;
   return result;
 };
 
 const handleEntry = (acc, curr) => {
-  const hours = getHours(curr);
-  return accumulateHours(acc, curr.personID, curr.date, hours);
+  return accumulateHours(acc, curr.personID, curr.date, getHours(curr));
 };
 
 const calculateDailyWage = (dayEntry) => {
   const HOURLY_WAGE = 3.75;
   const EVENING_BONUS = 1.15;
-  return (dayEntry.hours.weighted * HOURLY_WAGE) + (dayEntry.hours.evening * EVENING_BONUS);
+  return (getOvertimeWeightedHours(dayEntry.hours.total) * HOURLY_WAGE) + (dayEntry.hours.evening * EVENING_BONUS);
 };
 
 const calculatePersonWage = (personHourEntries) => {
@@ -84,8 +81,18 @@ const calculatePersonWage = (personHourEntries) => {
   return { personID: personHourEntries.personID, wage };
 };
 
+const addName = (element, rawData) => {
+  const result = _.cloneDeep(element);
+  result.personName = _.find(rawData, {personID: element.personID}).personName;
+  return result;
+}
+
+const getMonthAndYear = (wages) => moment(wages[0].dailyHours[0].date).format('MM/YYYY');
+
 module.exports = { handleEntry,
   getOvertimeWeightedHours,
   calculatePersonWage,
   getEveningHours,
-  accumulateHours };
+  accumulateHours ,
+  addName,
+  getMonthAndYear };
