@@ -2,7 +2,7 @@ const moment = require('moment');
 
 const getColumnNames = (headerRow, delimiter) => headerRow.split(delimiter);
 
-// 3.3.2014, (8:30 or 08:30)
+// 3.3.2014, {8:30 or 08:30}
 const toDateTime = (date, time) => moment(`${date}-${time}`, 'DD.MM.YYYY-HH:mm');
 
 const getStartAndEndTime = (entry) => {

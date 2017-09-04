@@ -34,7 +34,6 @@ describe('parse csv', () => {
 
     it('correctly parses entry that passes midnight', () => {
       const result = parseWageEntries(['Person Name,Person ID,Date,Start,End', 'Janet Java,1,11.3.2014,9:00,3:30']);
-      const ref = { personName: 'Janet Java', personID: '1', date: '2014-03-11', startTime: moment('11.3.2014-9:00', 'DD.MM.YYYY-HH:mm'), endTime: moment('12.3.2014-3:30', 'DD.MM.YYYY-HH:mm') };
       result[0].date.should.equal('2014-03-11');
       result[0].startTime.toString().should.equal(moment('11.3.2014-9:00', 'DD.MM.YYYY-HH:mm').toString());
       result[0].endTime.toString().should.equal(moment('12.3.2014-3:30', 'DD.MM.YYYY-HH:mm').toString());
