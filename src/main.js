@@ -26,9 +26,10 @@ readFile('./data/HourList201403.csv', 'utf8')
     console.log(formatResult(wages, getMonthAndYear(allHours)));
 
     app = express();
+    app.set('view engine', 'pug');
 
     app.get('/', (req, res) => {
-      res.send(formatResult(wages));
+      res.render('index', { title: 'wages', message: formatResult(wages, getMonthAndYear(allHours)) })
     });
 
     const port = (process.env.PORT || 3000);
