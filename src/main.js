@@ -13,7 +13,7 @@ let app;
 const formatResult = (data, monthAndYear) => {
   const result = {};
   result.headerText = `Monthly Wages ${monthAndYear}`;
-  result.values = data.map(el => ({value: `${el.personID}, ${el.personName}, $${el.wage}`}));
+  result.values = _.sortBy(data, ['personID']).map(el => ({value: `${el.personID}, ${el.personName}, $${el.wage}`}));
   return result;
 }
 
