@@ -11,10 +11,10 @@ const readFile = Promise.promisify(require('fs').readFile);
 let app;
 
 const formatResult = (data, monthAndYear) => {
-  return data.reduce(
-    (acc, curr) => (acc + `${curr.personID}, ${curr.personName}, $${curr.wage}\n`),
-    `Monthly Wages ${monthAndYear}\n`
-  );
+  const result = {};
+  result.headerText = `Monthly Wages ${monthAndYear}`;
+  result.values = data.map(el => ({value: `${el.personID}, ${el.personName}, $${el.wage}`}));
+  return result;
 }
 
 readFile('./data/HourList201403.csv', 'utf8')
@@ -24,12 +24,12 @@ readFile('./data/HourList201403.csv', 'utf8')
     const wages = allHours.map(personData => calculatePersonWage(personData))
       .map(personData => addName(personData, wageEntries));
     console.log(formatResult(wages, getMonthAndYear(allHours)));
-
+    
     app = express();
     app.set('view engine', 'pug');
 
     app.get('/', (req, res) => {
-      res.render('index', { title: 'wages', message: formatResult(wages, getMonthAndYear(allHours)) })
+      res.render('index', { title: 'wages', data: formatResult(wages, getMonthAndYear(allHours)) });
     });
 
     const port = (process.env.PORT || 3000);

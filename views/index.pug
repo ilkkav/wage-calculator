@@ -2,12 +2,32 @@ style.
     h1 {
         font-size: 19px;
         color: #464646;
-        background-color: white;
         text-align: center;
         font-family: "Roboto", sans-serif;
       }
+    container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -100px;
+    }
+    body {
+      background-color: #ecf0f1;      
+    }
+    p {
+      color: #111111;
+      justify-content: center;
+      font-family: "Roboto", sans-serif;
+      
+    }
 html
   head
     title= title
   body
-    h1= message
+    container
+      div 
+        h1= data.headerText
+      each wage in data.values
+        div
+          p= wage.value
