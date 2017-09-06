@@ -5,7 +5,8 @@ const parser = require('./parseCsv');
 const _ = require('lodash');
 
 const { parseCsv, parseWageEntries } = require('./parseCsv');
-const { handleEntry, calculatePersonWage, addName, getMonthAndYear } = require('./calculateHours');
+const { handleEntry } = require('./calculateHours');
+const { calculatePersonWage, getMonthAndYear } = require('./calculateWages');
 const readFile = Promise.promisify(require('fs').readFile);
 
 let app;
@@ -17,14 +18,20 @@ const formatResult = (data, monthAndYear) => {
   return result;
 }
 
+const addName = (element, rawData) => {
+  const result = _.cloneDeep(element);
+  result.personName = _.find(rawData, {personID: element.personID}).personName;
+  return result;
+}
+
 readFile('./data/HourList201403.csv', 'utf8')
   .then((content) => {
     const wageEntries = parseWageEntries(parseCsv(content, ','));
-    const allHours = wageEntries.reduce(handleEntry, []);
+    const allHours = wageEntries.reduce(accumulateHours, []);
     const wages = allHours.map(personData => calculatePersonWage(personData))
       .map(personData => addName(personData, wageEntries));
     console.log(formatResult(wages, getMonthAndYear(allHours)));
-    
+
     app = express();
     app.set('view engine', 'pug');
 
