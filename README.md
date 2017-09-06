@@ -1,8 +1,10 @@
 # wage-calculator
-Parse hour entries and calculate wages from a csv file.
+Parse hour entries and calculate monthly wages from a csv file.
 
-## Run locally
-run `npm start`
+## Setup and run locally
+`npm install`
+
+`npm start`
 
 Open http://localhost:3000 in your browser.
 
