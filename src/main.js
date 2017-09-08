@@ -5,7 +5,7 @@ const parser = require('./parseCsv');
 const _ = require('lodash');
 
 const { parseCsv, parseWageEntries } = require('./parseCsv');
-const { handleEntry } = require('./calculateHours');
+const { accumulateHours } = require('./calculateHours');
 const { calculatePersonWage, getMonthAndYear } = require('./calculateWages');
 const readFile = Promise.promisify(require('fs').readFile);
 
