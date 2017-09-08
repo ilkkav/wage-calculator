@@ -1,7 +1,28 @@
 const should = require('should');
-const { getOvertimeWeightedHours } = require('../src/calculateWages');
+const { getOvertimeWeightedHours, calculatePersonWage, unitWages } = require('../src/calculateWages');
 
-describe('overtime hours', () => {
+const getWageEntries = () => (
+  {
+    personID: 'foo',
+    dailyHours: [
+      {
+        date: '2017-06-06',
+        hours: {
+          total: 8,
+          evening: 0
+        },
+      },
+      {
+        date: '2017-06-07',
+        hours: {
+          total: 7,
+          evening: 0,
+        },
+      },
+    ]
+  });
+
+describe('wages and overtime', () => {
 
   it('calculate weighted hours with and without overtime', () => {
     getOvertimeWeightedHours(7).should.equal(7);
@@ -13,4 +34,29 @@ describe('overtime hours', () => {
     getOvertimeWeightedHours(14).should.equal(8 + (2 * 1.25) + (2 * 1.5) + (2 * 2.0));
     getOvertimeWeightedHours(20).should.equal(8 + (2 * 1.25) + (2 * 1.5) + (8 * 2.0));
   });
-});
+
+  it('calculate persons wage with normal hours', () => {
+    const wages = getWageEntries();
+    calculatePersonWage(wages).wage.should.equal((8+7)*unitWages.hourly);
+  });
+
+  it('calculate persons wage with normal and evening hours', () => {
+    const wages = getWageEntries();
+    wages.dailyHours[0].hours.evening = 5;
+
+    calculatePersonWage(wages).wage.should.equal((8+7)*unitWages.hourly + (5)*unitWages.evening);
+  });
+
+  it('calculate persons wage with normal and overtime hours', () => {
+    const wages = getWageEntries();
+    wages.dailyHours[0].hours.total = 10;
+    calculatePersonWage(wages).wage.should.equal((8 + (2* 1.25) + 7) * unitWages.hourly);
+  });
+
+  it('calculate persons wage with normal, overtime and evening hours', () => {
+    const wages = getWageEntries();
+    wages.dailyHours[0].hours.total = 10;
+    wages.dailyHours[0].hours.evening = 5;
+    calculatePersonWage(wages).wage.should.equal((8 + (2* 1.25) + 7)*unitWages.hourly + (5*unitWages.evening));
+  });
+})

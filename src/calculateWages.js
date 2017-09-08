@@ -1,5 +1,10 @@
 const moment = require('moment');
 
+const unitWages = {
+  hourly: 3.75,
+  evening: 1.15,
+}
+
 const getWeightedHours = (total, hours, maxHours, weight) => {
   const weightedHours = Math.min(hours, maxHours) * weight;
   return [total + weightedHours, (hours - maxHours)];
@@ -22,9 +27,8 @@ const getOvertimeWeightedHours = (hours) => {
 };
 
 const calculateDailyWage = (dayEntry) => {
-  const HOURLY_WAGE = 3.75;
-  const EVENING_BONUS = 1.15;
-  return (getOvertimeWeightedHours(dayEntry.hours.total) * HOURLY_WAGE) + (dayEntry.hours.evening * EVENING_BONUS);
+  return (getOvertimeWeightedHours(dayEntry.hours.total) * unitWages.hourly) 
+    + (dayEntry.hours.evening * unitWages.evening);
 };
 
 const calculatePersonWage = (personHourEntries) => {
@@ -35,4 +39,4 @@ const calculatePersonWage = (personHourEntries) => {
 
 const getMonthAndYear = (wages) => moment(wages[0].dailyHours[0].date).format('MM/YYYY');
 
-module.exports = { getMonthAndYear, calculatePersonWage, getOvertimeWeightedHours };
+module.exports = { getMonthAndYear, calculatePersonWage, getOvertimeWeightedHours, unitWages };
