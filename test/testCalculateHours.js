@@ -1,14 +1,12 @@
-const should = require('should');
+should = require('should');
 const { getEveningHours, accumulateHours } = require('../src/calculateHours');
 
 const Moment = require('moment');
 const MomentRange = require('moment-range');
-
 const moment = MomentRange.extendMoment(Moment);
 const _ = require('lodash');
 
 describe('get hours', () => {
-
   const newEntry = {
     personID: '1',
     date: '2017-03-03',
@@ -17,12 +15,13 @@ describe('get hours', () => {
   };
 
   it('accumulate hours to empty collection', () => {
+
     const result = accumulateHours([], newEntry);
     result.length.should.equal(1);
     const personDay = result[0];
     personDay.personID.should.equal('1');
     personDay.dailyHours.length.should.equal(1);
-    personDay.dailyHours[0].should.deepEqual({ date: '2017-03-03', hours: { evening: 2, total: 11.5 } });
+    personDay.dailyHours[0].should.deepEqual({ date: '2017-03-03', hours: { evening: 2.00, total: 11.5 } });
   });
 
   it('accumulate hours to existing person-date entry', () => {
@@ -40,7 +39,7 @@ describe('get hours', () => {
     const result = accumulateHours(existingHours, newEntry);
     result.length.should.equal(1);
     const person = _.find(result, { personID: '1' });
-    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({  evening: 8, total: 17.5 });
+    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({ evening: 8, total: 17.5 });
   });
 
   it('create new day for existing person', () => {
@@ -59,9 +58,9 @@ describe('get hours', () => {
     result.length.should.equal(1);
     const person = _.find(result, { personID: '1' });
     person.dailyHours.length.should.equal(2);
-    _.find(person.dailyHours, { date: '2017-03-02' }).hours.should.deepEqual({  evening: 6, total: 6 });
-    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({  evening: 2, total: 11.5 });
-  })
+    _.find(person.dailyHours, { date: '2017-03-02' }).hours.should.deepEqual({ evening: 6, total: 6 });
+    _.find(person.dailyHours, { date: '2017-03-03' }).hours.should.deepEqual({ evening: 2, total: 11.5 });
+  });
 
   it('calculate evening hours', () => {
     getEveningHours(moment('2017-08-28T03:00'), moment('2017-08-28T19:30')).should.equal(4.5);

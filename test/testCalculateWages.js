@@ -1,4 +1,4 @@
-const should = require('should');
+should = require('should');
 const { getOvertimeWeightedHours, calculatePersonWage, unitWages } = require('../src/calculateWages');
 
 const getWageEntries = () => (
@@ -9,7 +9,7 @@ const getWageEntries = () => (
         date: '2017-06-06',
         hours: {
           total: 8,
-          evening: 0
+          evening: 0,
         },
       },
       {
@@ -19,11 +19,10 @@ const getWageEntries = () => (
           evening: 0,
         },
       },
-    ]
+    ],
   });
 
 describe('wages and overtime', () => {
-
   it('calculate weighted hours with and without overtime', () => {
     getOvertimeWeightedHours(7).should.equal(7);
     getOvertimeWeightedHours(8).should.equal(8);
@@ -37,26 +36,26 @@ describe('wages and overtime', () => {
 
   it('calculate persons wage with normal hours', () => {
     const wages = getWageEntries();
-    calculatePersonWage(wages).wage.should.equal((8+7)*unitWages.hourly);
+    calculatePersonWage(wages).wage.should.equal((8 + 7) * unitWages.hourly);
   });
 
   it('calculate persons wage with normal and evening hours', () => {
     const wages = getWageEntries();
     wages.dailyHours[0].hours.evening = 5;
 
-    calculatePersonWage(wages).wage.should.equal((8+7)*unitWages.hourly + (5)*unitWages.evening);
+    calculatePersonWage(wages).wage.should.equal((8 + 7) * unitWages.hourly + (5) * unitWages.evening);
   });
 
   it('calculate persons wage with normal and overtime hours', () => {
     const wages = getWageEntries();
     wages.dailyHours[0].hours.total = 10;
-    calculatePersonWage(wages).wage.should.equal((8 + (2* 1.25) + 7) * unitWages.hourly);
+    calculatePersonWage(wages).wage.should.equal((8 + (2 * 1.25) + 7) * unitWages.hourly);
   });
 
   it('calculate persons wage with normal, overtime and evening hours', () => {
     const wages = getWageEntries();
     wages.dailyHours[0].hours.total = 10;
     wages.dailyHours[0].hours.evening = 5;
-    calculatePersonWage(wages).wage.should.equal((8 + (2* 1.25) + 7)*unitWages.hourly + (5*unitWages.evening));
+    calculatePersonWage(wages).wage.should.equal((8 + (2 * 1.25) + 7) * unitWages.hourly + (5 * unitWages.evening));
   });
-})
+});

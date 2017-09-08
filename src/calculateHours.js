@@ -1,6 +1,7 @@
 
 const Moment = require('moment');
 const MomentRange = require('moment-range');
+
 const moment = MomentRange.extendMoment(Moment);
 const _ = require('lodash');
 
@@ -29,12 +30,12 @@ const getHours = (entry) => {
 };
 
 const doAccumulateHours = (result, personID, date, hours) => {
-  const person = result.find(el => el.personID === personID);
+  const person = _.find(result, { personID });
   if (!person) {
     result.push({ personID, dailyHours: [{ date, hours }] });
     return result;
   }
-  const personDate = person.dailyHours.find(el => el.date === date);
+  const personDate = _.find(person.dailyHours, { date });
   if (!personDate) {
     person.dailyHours.push({ date, hours });
     return result;
@@ -44,11 +45,9 @@ const doAccumulateHours = (result, personID, date, hours) => {
   return result;
 };
 
-const accumulateHours = (acc, curr) => {
-  return doAccumulateHours(acc, curr.personID, curr.date, getHours(curr));
-};
+const accumulateHours = (acc, curr) => doAccumulateHours(acc, curr.personID, curr.date, getHours(curr));
 
 module.exports = {
   getEveningHours,
-  accumulateHours ,
+  accumulateHours,
 };
