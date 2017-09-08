@@ -37,6 +37,6 @@ const calculatePersonWage = (personHourEntries) => {
   return { personID: personHourEntries.personID, wage };
 };
 
-const getMonthAndYear = (wages) => moment(wages[0].dailyHours[0].date).format('MM/YYYY');
+const getWagePeriod = (wages) => moment(wages[0].dailyHours[0].date).format('MM/YYYY');
 
-module.exports = { getMonthAndYear, calculatePersonWage, getOvertimeWeightedHours, unitWages };
+module.exports = { getWagePeriod, calculatePersonWage, getOvertimeWeightedHours, unitWages };
