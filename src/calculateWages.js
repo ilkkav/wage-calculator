@@ -4,8 +4,8 @@ const moment = require('moment');
 const toDecimal = number => new Decimal(number).toDecimalPlaces(2);
 
 const unitWages = {
-  hourly: toDecimal(3.75),
-  evening: toDecimal(1.15),
+  hourly: 3.75,
+  evening: 1.15,
 };
 
 const getWeightedHours = (total, hours, maxHours, weight) => {

@@ -31,18 +31,24 @@ const getWages = () => readFile('./data/HourList201403.csv', 'utf8')
     return formatResult(wages, getWagePeriod(allHours));
   });
 
-const app = express();
-app.set('view engine', 'pug');
+const initializeApp = () => {
+  const app = express();
+  app.set('view engine', 'pug');
 
-app.get('/', (req, res) => {
-  getWages()
-    .then((wageData) => {
-      res.render('index', { title: 'wages', data: wageData });
-    });
-});
+  app.get('/', (req, res) => {
+    getWages()
+      .then((wageData) => {
+        res.render('index', { title: 'wages', data: wageData });
+      });
+  });
+  return app;
+};
 
-const port = (process.env.PORT || 3000);
+if (!module.parent) {
+  const app = initializeApp();
+  const port = (process.env.PORT || 3000);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}!`);
-});
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}!`);
+  });
+}
