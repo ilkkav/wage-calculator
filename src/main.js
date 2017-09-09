@@ -11,7 +11,8 @@ const readFile = Promise.promisify(require('fs').readFile);
 const formatResult = (data, monthAndYear) => {
   const result = {};
   result.headerText = `Monthly Wages ${monthAndYear}`;
-  result.values = _.sortBy(data, ['personID']).map(el => ({ value: `${el.personID}, ${el.personName}, $${el.wage}` }));
+  result.values = _.sortBy(data, ['personID']).map(el =>
+    ({ value: `${el.personID}, ${el.personName}, ${el.wage.toFixed(2)}` }));
   return result;
 };
 
@@ -29,7 +30,6 @@ const getWages = () => readFile('./data/HourList201403.csv', 'utf8')
       .map(personData => addName(personData, wageEntries));
     return formatResult(wages, getWagePeriod(allHours));
   });
-
 
 const app = express();
 app.set('view engine', 'pug');

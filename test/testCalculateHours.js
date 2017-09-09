@@ -3,6 +3,7 @@ const { getEveningHours, accumulateHours } = require('../src/calculateHours');
 
 const Moment = require('moment');
 const MomentRange = require('moment-range');
+
 const moment = MomentRange.extendMoment(Moment);
 const _ = require('lodash');
 
@@ -15,7 +16,6 @@ describe('get hours', () => {
   };
 
   it('accumulate hours to empty collection', () => {
-
     const result = accumulateHours([], newEntry);
     result.length.should.equal(1);
     const personDay = result[0];
@@ -63,12 +63,14 @@ describe('get hours', () => {
   });
 
   it('calculate evening hours', () => {
-    getEveningHours(moment('2017-08-28T03:00'), moment('2017-08-28T19:30')).should.equal(4.5);
-    getEveningHours(moment('2017-08-28T07:00'), moment('2017-08-28T19:30')).should.equal(1.5);
+    getEveningHours(moment('2017-08-28T03:00'), moment('2017-08-28T19:30')).should.equal(4.50);
+    getEveningHours(moment('2017-08-28T07:00'), moment('2017-08-28T19:15')).should.equal(1.25);
+    getEveningHours(moment('2017-08-28T07:00'), moment('2017-08-28T19:10')).should.equal(1.17);
     getEveningHours(moment('2017-08-28T06:00'), moment('2017-08-28T18:00')).should.equal(0);
     getEveningHours(moment('2017-08-28T09:00'), moment('2017-08-28T12:00')).should.equal(0);
     getEveningHours(moment('2017-08-28T17:00'), moment('2017-08-29T01:00')).should.equal(7);
     getEveningHours(moment('2017-08-28T00:00'), moment('2017-08-29T06:00')).should.equal(18);
-    getEveningHours(moment('2017-08-29T00:00'), moment('2017-08-29T01:00')).should.equal(1);
+    getEveningHours(moment('2017-08-29T00:45'), moment('2017-08-29T01:00')).should.equal(0.25);
+    getEveningHours(moment('2017-08-28T08:00'), moment('2017-08-28T19:00')).should.equal(1);
   });
 });

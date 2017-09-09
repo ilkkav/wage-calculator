@@ -46,16 +46,18 @@ describe('wages and overtime', () => {
     calculatePersonWage(wages).wage.should.equal((8 + 7) * unitWages.hourly + (5) * unitWages.evening);
   });
 
-  it('calculate persons wage with normal and overtime hours', () => {
+  it('calculate persons wage with normal and overtime hours and round correctly', () => {
     const wages = getWageEntries();
     wages.dailyHours[0].hours.total = 10;
-    calculatePersonWage(wages).wage.should.equal((8 + (2 * 1.25) + 7) * unitWages.hourly);
+    const expectedRounded = 65.63;
+    calculatePersonWage(wages).wage.should.equal(expectedRounded);
   });
 
-  it('calculate persons wage with normal, overtime and evening hours', () => {
+  it('calculate persons wage with normal, overtime and evening hours and round correctly', () => {
     const wages = getWageEntries();
     wages.dailyHours[0].hours.total = 10;
     wages.dailyHours[0].hours.evening = 5;
-    calculatePersonWage(wages).wage.should.equal((8 + (2 * 1.25) + 7) * unitWages.hourly + (5 * unitWages.evening));
+    const expectedRounded = 71.38;
+    calculatePersonWage(wages).wage.should.equal(expectedRounded);
   });
 });

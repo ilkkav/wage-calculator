@@ -1,7 +1,11 @@
+const Decimal = require('decimal.js');
 const moment = require('moment');
+
+const toDecimal = number => new Decimal(number).toDecimalPlaces(2);
+
 const unitWages = {
-  hourly: 3.75,
-  evening: 1.15,
+  hourly: toDecimal(3.75),
+  evening: toDecimal(1.15),
 };
 
 const getWeightedHours = (total, hours, maxHours, weight) => {
@@ -32,7 +36,7 @@ const calculateDailyWage = dayEntry =>
 const calculatePersonWage = (personHourEntries) => {
   const wage = personHourEntries.dailyHours.reduce(
     (acc, curr) => acc + calculateDailyWage(curr), 0);
-  return { personID: personHourEntries.personID, wage };
+  return { personID: personHourEntries.personID, wage: toDecimal(wage).toNumber() };
 };
 
 const getWagePeriod = wages => moment(wages[0].dailyHours[0].date).format('MM/YYYY');

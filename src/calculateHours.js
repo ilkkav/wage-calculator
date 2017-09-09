@@ -8,8 +8,8 @@ const _ = require('lodash');
 const diffAsHours = (startTime, endTime) => moment.duration(endTime.diff(startTime)).asHours();
 
 const getEveningHours = (start, end) => {
-  const dayShiftStart = moment(start).hours(6);
-  const dayShiftEnd = moment(start).hours(18);
+  const dayShiftStart = moment(start).hours(6).minutes(0);
+  const dayShiftEnd = moment(start).hours(18).minutes(0);
 
   const range = moment.range(start, end);
   const dayShiftRange = moment.range(dayShiftStart, dayShiftEnd);
@@ -20,7 +20,7 @@ const getEveningHours = (start, end) => {
     return totalHours;
   }
   const dayShiftHours = diffAsHours(dayShiftIntersect.start, dayShiftIntersect.end);
-  return totalHours - dayShiftHours;
+  return parseFloat((totalHours - dayShiftHours).toFixed(2));
 };
 
 const getHours = (entry) => {
